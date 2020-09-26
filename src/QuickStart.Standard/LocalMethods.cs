@@ -7,19 +7,17 @@ namespace QuickStart.Standard
 {
     public class LocalMethods
     {
-        public async Task<object> GetAppDomainDirectory(dynamic input)
+        public async Task<object> monitorHealthCard(dynamic input)
         {
-            return AppDomain.CurrentDomain.BaseDirectory;
+            //return AppDomain.CurrentDomain.BaseDirectory;
+            return " Health Card checking completed.";
         }
 
-        public async Task<object> GetCurrentTime(dynamic input)
+        public async Task<object> sanitizeHeatlCard(dynamic input)
         {
-            return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            return " Health card sanitization completed.";
         }
 
-        public async Task<object> UseDynamicInput(dynamic input)
-        {
-            return $".NET Standard welcomes {input}";
-        }
+
     }
 }

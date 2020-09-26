@@ -1,6 +1,7 @@
 const electron = require('electron');
 
-var version = process.argv[1].replace('--', '');
+var version = process.argv[1].replace('--', '');  //version=core  //process.argv[1]= --
+ 
 
 // Module to control application life.
 const app = electron.app;
@@ -24,8 +25,7 @@ function createWindow () {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/index.html?version=${version}`);
-
+  mainWindow.loadURL(`file://${__dirname}/index.html?version=${version}`); //Promise { <pending> }
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
@@ -51,6 +51,7 @@ app.on('window-all-closed', function () {
     app.quit()
   //}
 });
+
 
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the

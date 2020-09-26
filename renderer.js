@@ -1,66 +1,69 @@
 const path = require('path');
-var version = location.search.split('version=')[1];
+var version = location.search.split('version=')[1]; //core
+
 var namespace = 'QuickStart.' + version.charAt(0).toUpperCase() + version.substr(1);
+//console.log(namespace)  QuickStart.Core
 if(version === 'core') version = 'coreapp';
 
 const baseNetAppPath = path.join(__dirname, '/src/'+ namespace +'/bin/Debug/net'+ version +'2.0');
+console.log(baseNetAppPath)    //D:\Prograde-poc-vgs\src\QuickStart.Core\bin\Debug\netcoreapp2.0
 
-process.env.EDGE_USE_CORECLR = 1;
+process.env.EDGE_USE_CORECLR = 1;  //This repo contains the .NET Core runtimeCoreCLR
+
 if(version !== 'standard')
-    process.env.EDGE_APP_ROOT = baseNetAppPath;
+   process.env.EDGE_APP_ROOT = baseNetAppPath;
+    
 
 var edge = require('electron-edge-js');
 
-var baseDll = path.join(baseNetAppPath, namespace + '.dll');
+var baseDll = path.join(baseNetAppPath, namespace + '.dll');  //dll= D:\Prograde-poc-vgs\src\QuickStart.Core\bin\Debug\netcoreapp2.0\QuickStart.Core.dll
 
-var localTypeName = namespace + '.LocalMethods';
-var externalTypeName = namespace + '.ExternalMethods';
 
-var getAppDomainDirectory = edge.func({
+var localTypeName = namespace + '.LocalMethods';   //QuickStart.Core.LocalMethods
+var name="Monika";
+
+var card = edge.func({
     assemblyFile: baseDll,
     typeName: localTypeName,
-    methodName: 'GetAppDomainDirectory'
+    methodName: 'monitorHealthCard'
 });
 
-var getCurrentTime = edge.func({
+var sanitize = edge.func({
     assemblyFile: baseDll,
     typeName: localTypeName,
-    methodName: 'GetCurrentTime'
+    methodName: 'sanitizeHeatlCard'
 });
 
-var useDynamicInput = edge.func({
-    assemblyFile: baseDll,
-    typeName: localTypeName,
-    methodName: 'UseDynamicInput'
-});
 
-var getPerson = edge.func({
-    assemblyFile: baseDll,
-    typeName: externalTypeName,
-    methodName: 'GetPersonInfo'
-});
 
 
 window.onload = function() {
+    var healthBtn=document.getElementById('healthBtn');
+    const sanitizeBtn=document.getElementById('sanitizeBtn');
 
-    getAppDomainDirectory('', function(error, result) {
-        if (error) throw error;
-        document.getElementById("GetAppDomainDirectory").innerHTML = result;
-    });
+    healthBtn.addEventListener('click',cardHealth);
+    sanitizeBtn.addEventListener('click',sanitizeCard);
 
-    getCurrentTime('', function(error, result) {
-        if (error) throw error;
-        document.getElementById("GetCurrentTime").innerHTML = result;
-    });
+   
+    function cardHealth(){
+        
+        card('', function(error, result) {
+                if (error) throw error;
+                 //document.getElementById("display").innerHTML = result;
+                 alert(result);
+             });
+    }
 
-    useDynamicInput('Node.Js', function(error, result) {
-        if (error) throw error;
-        document.getElementById("UseDynamicInput").innerHTML = result;
-    });
+    function sanitizeCard(){
+        
+        sanitize('', function(error, result) {
+                if (error) throw error;
+                 //document.getElementById("display").innerHTML = result;
+                 alert(result);
+             });
+    }
 
-    getPerson('', function(error, result) {
-        //if (error) throw JSON.stringify(error);
-        document.getElementById("GetPersonInfo").innerHTML = result;
-    });
+    
+
 
 };
